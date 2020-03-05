@@ -25,9 +25,9 @@ let allMesssages            =   require('./../../constantfiles/messages');
 
         return new Promise((resolve,reject) =>{
             if(!allParams.AgentID){
-                reject("AgentID is mandatory.");
+                reject(allMesssages.MandatoryMessages.MandatoryAgentID);
             }else if(!allParams.Password){
-                reject("Password is mandatory.");
+                reject(allMesssages.MandatoryMessages.MandatoryPassword);
             }else{
                 resolve(null);
             }
@@ -38,13 +38,13 @@ let allMesssages            =   require('./../../constantfiles/messages');
             if(agentDetails){
                 console.log("in",agentDetails);
                 if(agentDetails.Password === allParams.Password){
-                    res.status(200).json({status : true, message : allMesssages.LoginSuccess,data : null});
+                    res.status(200).json({status : true, message : allMesssages.SuccessMessages.LoginSuccess,data : null});
                 }else{
-                    res.status(200).json({status : false,message : allMesssages.IncorrectPassword,data : null});
+                    res.status(200).json({status : false,message : allMesssages.IncorrectMessages.IncorrectPassword,data : null});
                 }
             }else{
                 console.log("out",agentDetails);
-                res.status(200).json({status : false,message : allMesssages.IncorrectAgentID,data : null});
+                res.status(200).json({status : false,message : allMesssages.IncorrectMessages.IncorrectAgentID,data : null});
             }
         }).catch((err)=>{
             res.status(400).json({status: false, message: err, data: null });

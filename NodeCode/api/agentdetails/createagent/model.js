@@ -25,12 +25,12 @@ let agentDetails    =   new Schema({
     Country         :   String,
     BranchName      :   String,
     Department      :   String,
-    ManagerID       :   {type:ObjectID,ref:'agentdetails'},
+    ManagerID       :   {type:String,ref:'agentdetails'},
     DateOfBirth     :   Date,
     Age             :   Number,
     Photo           :   String,
-    CreatedBy       :   {type:ObjectID,ref:'agentdetails'},
-    UpdatedBy       :   {type:ObjectID,ref:'agentdetails'}
+    CreatedBy       :   {type:String,ref:'agentdetails'},
+    UpdatedBy       :   {type:String,ref:'agentdetails'}
 },{
     timestamps: true,
     versionKey: false,

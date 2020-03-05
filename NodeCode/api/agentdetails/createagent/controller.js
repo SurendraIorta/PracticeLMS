@@ -25,15 +25,15 @@
         console.log("allParams for creating agent = ",allParams);
         return new Promise((resolve,reject) => {
             if(allParams.Age > 60 && allParams.Age < 18){
-                reject(allMessages.InvalidAge);
+                reject(allMessages.InvalidMessages.InvalidAge);
             }else if(!allParams.ManagerID){
-                reject(allMessages.InvalidManagerId);
+                reject(allMessages.InvalidMessages.InvalidManagerId);
             }else if(!allParams.CreatedBy){
-                reject(allMessages.InvalidCreatedBy);
+                reject(allMessages.MandatoryMessages.CreatedBy);
             }else if(!allParams.ContactNumber || (allParams.ContactNumber.length !== 10)){
-                reject(allMessages.InvalidContactNumber);
+                reject(allMessages.InvalidMessages.InvalidContactNumber);
             }else if((allParams.OtherContactNumber.length !== 10)){
-                reject(allMessages.InvalidContactNumber);
+                reject(allMessages.InvalidMessages.InvalidContactNumber+"In OtherContactNumber.");
             }else resolve(null)
         }).then(()  =>{
             return agentCollection.findOne({"Email":allParams.Email});
@@ -41,11 +41,11 @@
             console.log("agentDetails",agentDetails);
             if(agentDetails){
                 console.log("agentDetails3",agentDetails);
-                throw allMessages.AgentMailExist;
+                throw allMessages.AlreadyExistMessages.AgentMailExist;
             }else{
                 console.log("agentDetails4",agentDetails);
-                allParams.ManagerID = allParams.ManagerID.length > 5 ? ObjectID(allParams.ManagerID) : "";
-                allParams.CreatedBy = allParams.CreatedBy.length > 5 ? ObjectID(allParams.CreatedBy) : "";
+                // allParams.ManagerID = allParams.ManagerID.length > 5 ? ObjectID(allParams.ManagerID) : "";
+                // allParams.CreatedBy = allParams.CreatedBy.length > 5 ? ObjectID(allParams.CreatedBy) : "";
                 allParams.UpdatedBy = allParams.CreatedBy;
 
                 console.log("agentDetails1",agentDetails);
