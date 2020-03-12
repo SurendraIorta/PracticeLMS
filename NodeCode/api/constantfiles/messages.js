@@ -1,3 +1,5 @@
+let mandatoryString =   " is mandatory.";
+
 module.exports = {
     "InvalidMessages"           :   {
         "InvalidManagerId"      :   "ManagerId is not valid.",
@@ -8,12 +10,29 @@ module.exports = {
         "InvalidMiddleName"     :   "Invalid Middle name, name should not have any space or special character.",
         "InvalidLastName"       :   "Invalid Last name, name should not have any space or special character.",
         "InvalidDateOfBirth"    :   "Date of birth should be less than today.",
+        "UpdatedBy"             :   "UpdatedBy is not valid.",
+        "OtherContactNumber"    :   "Invalid other contact number, please dont add 0 or country code.",
+        "Email"               :   "Please enter a valid Email."
     },
     "MandatoryMessages"         :   {
-        "MandatoryAgentID"      :   "AgentID is mandatory.",
-        "MandatoryManagerID"    :   "ManagerID is mandatory.",
-        "MandatoryPassword"     :   "Password is mandatory.",
-        "CreatedBy"             :   "CreatedBy is mandatory."
+        "MandatoryAgentID"      :   "AgentID" + mandatoryString,
+        "MandatoryManagerID"    :   "ManagerID"+ mandatoryString,
+        "MandatoryPassword"     :   "Password" + mandatoryString,
+        "CreatedBy"             :   "CreatedBy" + mandatoryString,
+        "UpdatedBy"             :   "UpdatedBy" + mandatoryString,
+        "LeadType"              :   "LeadType" + mandatoryString,
+        "Campaign"              :   "Campaign" + mandatoryString,
+        "AllocatedTo"           :   "AllocatedTo" + mandatoryString,
+        "AllocatedBy"           :   "AllocatedBy" + mandatoryString,
+        "IsReferenceLead"       :   "IsReferenceLead" + mandatoryString,
+        "RefferedBy"            :   "RefferedBy" + mandatoryString,
+        "FirstName"             :   "FirstName" + mandatoryString,
+        "LastName"              :   "LastName" + mandatoryString,
+        "MiddleName"            :   "MiddleName" + mandatoryString,
+        "ContactNumber"         :   "ContactNumber" + mandatoryString,
+        "Gender"                :   "Gender" + mandatoryString,
+        "DateOfBirth"           :   "DateOfBirth" + mandatoryString
+
     },
     "AlreadyExistMessages"      :   {
         "AgentMailExist"        :   "Agent email already exist.",

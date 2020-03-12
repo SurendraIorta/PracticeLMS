@@ -8,7 +8,6 @@
 
     let mongoose    = require('mongoose');
     let ObjectID    = mongoose.Types.ObjectId;
-    
     let agentCollection =   require('./model');
     let agentPasswordCollection =   require('./../AgentLogin/model');
     let allMessages     =   require('./../../constantfiles/messages');

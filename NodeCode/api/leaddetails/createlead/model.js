@@ -2,21 +2,21 @@ const mongoose  = require('mongoose');
 // const moment    = require('moment');
 const ObjectID  = mongoose.Types.ObjectId;
 const Schema    = mongoose.Schema;
-const commonObj = require('./../constantfiles/common');
+const commonObj = require('./../../constantfiles/common').commonObj;
 
 const today     =   new Date();
-
+console.log(commonObj.Campaign);
 let leadDetails = new Schema({
+    LeadID          :   {type:String,default:"LE"+today.getFullYear()+today.getMonth()+today.getDay()+today.getHours()+today.getMinutes()+today.getSeconds()+today.getMilliseconds()},
     LeadInfo            : {
-        LeadID          :   {type:String,default:"LE"+today.getFullYear()+today.getMonth()+today.getDay()+today.getHours()+today.getMinutes()+today.getSeconds()+today.getMilliseconds()},
-        LeadType        :   {type:String,enum:commonObj.LeadType},
-        Campaign        :   {type:String,enum:commonObj.Campaign},
-        AllocatedTo     :   {type:ObjectID,ref:'agentdetails'},
-        AllocatedBy     :   {type:ObjectID,ref:'agentdetails'},
+        LeadType        :   {type:String},
+        Campaign        :   {type:String},
+        AllocatedTo     :   {type:String,ref:'agentdetails'},
+        AllocatedBy     :   {type:String,ref:'agentdetails'},
         AllocatedOn     :   {type:Date,default: Date.now()},
         IsReferenceLead :   Boolean,
         RefferedBy      :   {type:String,ref:'leaddetails'},
-        LeadDisposition :   {type:String,enum:commonObj.lead_disposition},
+        LeadDisposition :   {type:String},
         LeadSubdisposition  :   String
     },
     PersonalInfo        :   {
@@ -31,27 +31,27 @@ let leadDetails = new Schema({
         City            :   String,
         State           :   String,
         Country         :   String,
-        MaritalStatus   :   {type:String,enum:commonObj.MaritalStatus},
-        Gender          :   {type:String,enum:commonObj.Gender},
+        MaritalStatus   :   {type:String},
+        Gender          :   {type:String},
         DateOfBirth     :   {type:Date},
         Age             :   {type:Number},
-        Occupation      :   {type:String,enum:commonObj.Occupation},
-        Income          :   {type:String,enum:commonObj.Income},
-        Education       :   {type:String,enum:commonObj.Education},
+        Occupation      :   {type:String},
+        Income          :   {type:String},
+        Education       :   {type:String},
         Photo           :   {type:String}
     },
     MeetingInfo :   {
         MeetinDate      :   Date,
         MeetingTime     :   String,
-        MeetingStatus   :   {type:String,enum:commonObj.MeetingStatus},
-        PolicySourced   :   {type:String,enum:commonObj.YesNoOption},
+        MeetingStatus   :   {type:String},
+        PolicySourced   :   {type:String},
         SelectedProduct :   {type:ObjectID,ref:'productoptions'},
-        PolicyNotSourcedReason  :   {type:String,enum:commonObj.reasonForNoPolicyOptions},
-        leadCategory    :   {type:String,enum:commonObj.leadCategoryOptions}
+        PolicyNotSourcedReason  :   {type:String},
+        leadCategory    :   {type:String}
     },
     FamilyInfo  :   {
         SpouseName          :   String,
-        SpouseOcccupation   :   {type:String,enum:commonObj.Occupation},
+        SpouseOcccupation   :   {type:String},
         SpouseDOB           :   Date,
         MarriageDate        :   Date,
         ChildOne            :   {
@@ -70,8 +70,8 @@ let leadDetails = new Schema({
             Gender          :   String
         }        
     },
-        CreatedBy,
-        UpdatedBy
+        CreatedBy:{type : String,ref:'agentdetails'},
+        UpdatedBy:{type : String,ref:'agentdetails'}
 },{
     timestamps: true,
     versionKey: false,
