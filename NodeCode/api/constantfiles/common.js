@@ -1,3 +1,6 @@
+let agentDetailsCollection =  require('./../agentdetails/createagent/model');
+
+
 var commonObj  =   {
    dayEnum   :   ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
    today     :   new Date(),
@@ -447,6 +450,47 @@ var commonObj  =   {
      var mobileRegExp	=	new RegExp('^[7|8|9][0-9]{9}');
      console.log("mobile for verification = ",mobile,mobileRegExp.test(mobile));
      return mobileRegExp.test(mobile);
+   },
+   "isValidName"    :  (name)=>{
+      let nameRegExp =  new RegExp("^[a-zA-Z]{3,10}");
+      console.log("mobile for verification = ",name,nameRegExp.test(name));
+      return nameRegExp.test(name);
+   },
+   "isValidAgentID"  :   (AgentID)=>{
+      console.log("AgentId for validation - "+AgentID);
+      agentDetailsCollection.find({"AgentID":AgentID}).exec().then((err,agentList)=>{
+         console.log("Test");
+         if(err){
+            console.log("common.js isValidAgentId function - "+err)
+            return err;
+         }else{
+            console.log(agentList);
+            return agentList.length;
+         }
+      });
+      console.log("Test");
+   },
+   "isValidOption"   :  (value,list,keyName)=>{
+      if(!keyName){
+         return list.find(function(elem){return elem === value;});
+      }else{
+         return list.find(function(elem){return elem[keyName] === value;});
+      }
+      
+   },
+   "getAgeOnDOB"     :  (dob)=>{
+      console.log("DOB - ",dob);
+    var dateString   = dob;
+    var today        = new Date();
+    var birthDate    = new Date(dateString);
+        age          = today.getFullYear() - birthDate.getFullYear();
+        age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        console.log("Age - ",age);
+        return age;
    }
  
 }

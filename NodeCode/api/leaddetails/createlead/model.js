@@ -5,9 +5,9 @@ const Schema    = mongoose.Schema;
 const commonObj = require('./../../constantfiles/common').commonObj;
 
 const today     =   new Date();
-console.log(commonObj.Campaign);
+// console.log(commonObj.Campaign);
 let leadDetails = new Schema({
-    LeadID          :   {type:String,default:"LE"+today.getFullYear()+today.getMonth()+today.getDay()+today.getHours()+today.getMinutes()+today.getSeconds()+today.getMilliseconds()},
+    LeadID          :   {type:String,default:"LE"+today.getFullYear()+(today.getMonth() +1)+today.getDay()+today.getHours()+today.getMinutes()+today.getSeconds()+today.getMilliseconds()},
     LeadInfo            : {
         LeadType        :   {type:String},
         Campaign        :   {type:String},
@@ -23,8 +23,8 @@ let leadDetails = new Schema({
         FirstName       :   String,
         LastName        :   String,
         MiddleName      :   String,
-        ContactNumber   :   Number,
-        OtherContactNumber  :   Number,
+        ContactNumber   :   String,
+        OtherContactNumber  :   String,
         Address1        :   String,
         Address2        :   String,
         Address3        :   String,
@@ -34,20 +34,21 @@ let leadDetails = new Schema({
         MaritalStatus   :   {type:String},
         Gender          :   {type:String},
         DateOfBirth     :   {type:Date},
-        Age             :   {type:Number},
+        Age             :   {type:Number,min:18,max:60},
         Occupation      :   {type:String},
         Income          :   {type:String},
         Education       :   {type:String},
         Photo           :   {type:String}
     },
     MeetingInfo :   {
-        MeetinDate      :   Date,
+        MeetingDate     :   Date,
         MeetingTime     :   String,
         MeetingStatus   :   {type:String},
+        NotMetReason    :   String,
         PolicySourced   :   {type:String},
         SelectedProduct :   {type:ObjectID,ref:'productoptions'},
         PolicyNotSourcedReason  :   {type:String},
-        leadCategory    :   {type:String}
+        LeadCategory    :   {type:String}
     },
     FamilyInfo  :   {
         SpouseName          :   String,
