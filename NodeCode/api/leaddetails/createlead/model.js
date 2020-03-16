@@ -55,19 +55,20 @@ let leadDetails = new Schema({
         SpouseOcccupation   :   {type:String},
         SpouseDOB           :   Date,
         MarriageDate        :   Date,
+        NumberOfChildrens   :   Number,
         ChildOne            :   {
             Name            :   String,
-            DOB             :   String,
+            DOB             :   Date,
             Gender          :   String
         },   
         ChildTwo            :   {
             Name            :   String,
-            DOB             :   String,
+            DOB             :   Date,
             Gender          :   String
         },  
         ChildThree          :   {
             Name            :   String,
-            DOB             :   String,
+            DOB             :   Date,
             Gender          :   String
         }        
     },

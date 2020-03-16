@@ -390,7 +390,7 @@ var commonObj  =   {
     lead_dis_notMet:[
        "To be followed",
        "Re-scheduled appointment",
-       " Not interested",
+       "Not interested",
        "Ringing",
        "Not reachable",
        "Right person not available",

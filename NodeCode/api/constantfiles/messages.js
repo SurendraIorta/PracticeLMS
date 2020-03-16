@@ -33,7 +33,15 @@ module.exports = {
         "SelectedProduct"       :   invalidString + "SelectedProduct.",
         "PolicyNotSourcedReason":   invalidString + "PolicyNotSourcedReason.",
         "LeadCategory"          :   invalidString + "LeadCategory.",
-        "NotMetReason"          :   invalidString + "NotMetReason." 
+        "NotMetReason"          :   invalidString + "NotMetReason." ,
+        "SpouseName"            :   invalidString + "SpouseName.",
+        "SpouseOcccupation"     :   invalidString + "SpouseOcccupation.",
+        "SpouseDOB"             :   invalidString + "SpouseDOB",
+        "MarriageDate"          :   invalidString + "MarriageDate",
+        "NumberOfChildrens"     :   invalidString + "NumberOfChildrens. Maximum allowed = 3.",
+        "ChildName"             :   invalidString + "ChildName",
+        "ChildDOB"              :   invalidString + "ChildDOB",
+        "ChildGender"           :   invalidString + "ChildGender"
     },
     "MandatoryMessages"         :   {
         "MandatoryAgentID"      :   "AgentID" + mandatoryString,
@@ -69,7 +77,15 @@ module.exports = {
         "SelectedProduct"       :   "SelectedProduct"  + mandatoryString,
         "PolicyNotSourcedReason":   "PolicyNotSourcedReason" + mandatoryString,
         "leadCategory"          :   "LeadCategory" + mandatoryString,
-        "NotMetReason"          :   "NotMetReason" + mandatoryString
+        "NotMetReason"          :   "NotMetReason" + mandatoryString,
+        "SpouseName"            :   "SpouseName" + mandatoryString,
+        "SpouseOcccupation"     :   "SpouseOcccupation" + mandatoryString,
+        "SpouseDOB"             :   "SpouseDOB" + mandatoryString,
+        "MarriageDate"          :   "MarriageDate" + mandatoryString,
+        "NumberOfChildrens"     :   "NumberOfChildrens" + mandatoryString,
+        "ChildName"             :   "ChildName"    +   mandatoryString,
+        "ChildDOB"              :   "ChildDOB"  +   mandatoryString,
+        "ChildGender"           :   "ChildGender"   +   mandatoryString
 
 
     },
@@ -90,7 +106,9 @@ module.exports = {
     "OtherMessages"             :   {
         "NoAgentReporting"      :   "No agent foud reporting to this manager.",
         "NoContactChange"       :   "ContactNumber should not be changed.",
-        "OCExists"              :   "OtherContactNumber already exists as other lead's ContactNumber."
+        "OCExists"              :   "OtherContactNumber already exists as other lead's ContactNumber.",
+        "MarriagedateYear"      :   "Marriage date is not acceptable Age should be more than 18 for Spouse.",
+        "SpouseAge"             :   "Spouse DOB is not valid. Age should be more than 18."
     }
     
 

@@ -132,7 +132,6 @@ let updateLeadPersonalDetails       =   (req,res)=>{
 
 }
 
-
 let updateMeetingInfo   =   (req,res) =>{
     var allParams       =   req.body;
 
@@ -159,6 +158,10 @@ let updateMeetingInfo   =   (req,res) =>{
             reject(allMessages.InvalidMessages.PolicyNotSourcedReason);
         }else if(!allParams.UpdatedBy){
             reject(allMessages.MandatoryMessages.UpdatedBy);
+        }else if(allParams.MeetingStatus == "Met" && !allParams.LeadCategory){
+            reject(allMessages.MandatoryMessages.leadCategory);
+        }else if(allParams.MeetingStatus == "Met" && !commonFuncAndObj.isValidOption(allParams.LeadCategory,commonFuncAndObj.leadCategoryOptions,"type")){
+            reject(allMessages.InvalidMessages.LeadCategory);
         }else if(allParams.MeetingStatus == "Not Met" && !allParams.NotMetReason){
             reject(allMessages.MandatoryMessages.NotMetReason);
         }else if(allParams.MeetingStatus == "Not Met" && !commonFuncAndObj.isValidOption(allParams.NotMetReason,commonFuncAndObj.lead_dis_notMet)){
@@ -166,10 +169,165 @@ let updateMeetingInfo   =   (req,res) =>{
         }else resolve(null);
 
     }).then(()=>{
-        
+        return agentDetailsCollection.find({"AgentID":allParams.UpdatedBy});
+    }).then((agentdetails)=>{
+        if(!agentdetails.length){
+            throw allMessages.InvalidMessages.UpdatedBy;
+        }else return leadCollection.find({"LeadID":allParams.LeadID});
+    }).then((leadDetails)=>{
+        if(!leadDetails.length){
+            throw allMessages.InvalidMessages.LeadID;
+        }else if(leadDetails[0].MeetingInfo.MeetingDate > new Date()){
+            throw allMessages.InvalidMessages.MeetingDate;
+        }else{
+            leadDetails                         =   leadDetails[0];
+            leadDetails.MeetingInfo.MeetingStatus           =   allParams.MeetingStatus;
+            leadDetails.MeetingInfo.NotMetReason            =   allParams.NotMetReason;
+            leadDetails.MeetingInfo.PolicySourced           =   allParams.PolicySourced;
+            leadDetails.MeetingInfo.SelectedProduct         =   allParams.SelectedProduct;
+            leadDetails.MeetingInfo.PolicyNotSourcedReason  =   allParams.PolicyNotSourcedReason;
+            leadDetails.MeetingInfo.LeadCategory            =   allParams.LeadCategory;
+            return leadCollection.findOneAndUpdate({"LeadID":allParams.LeadID},leadDetails);
+        }
+    }).then((meetingUpdated)=>{
+        if(!meetingUpdated){
+            res.status(200).json({status : false,message : "Something went wrong",data : meetingUpdated});
+        }else{
+            res.status(200).json({status : true,message : "Success", data : meetingUpdated});
+        }
     }).catch((err)=>{
         res.status(400).json({status : false, message : err, data : null});
     })
 }
 
-module.exports          =   updateLeadPersonalDetails;
+let updateFamilyInfo    =   (req,res) =>{
+    let allParams       =   req.body;
+
+    return new Promise((resolve,reject) =>{
+        if(!allParams.LeadID){
+            reject(allMessages.MandatoryMessages.LeadID);
+        }else if(!allParams.UpdatedBy){
+         reject(allMessages.MandatoryMessages.UpdatedBy);
+        }else if(!allParams.SpouseName){
+            reject(allMessages.MandatoryMessages.SpouseName);
+        }else if(!allParams.SpouseOcccupation){
+            reject(allMessages.MandatoryMessages.SpouseOcccupation);
+        }else if(commonFuncAndObj.isValidOption(allParams.SpouseOcccupation,commonFuncAndObj.Occupation,"Description")){
+            reject(allMessages.InvalidMessages.SpouseOcccupation);
+        }else if(!allParams.SpouseDOB){
+            reject(allMessages.MandatoryMessages.SpouseDOB);
+        }else if(commonFuncAndObj.getAgeOnDOB(allParams.SpouseDOB) < 18){
+            reject(allMessages.OtherMessages.SpouseAge);
+        }else if(!allParams.MarriageDate){
+            reject(allMessages.MandatoryMessages.MarriageDate);
+        }else if(!allParams.NumberOfChildrens && allParams.NumberOfChildrens != 0){
+            reject(allMessages.MandatoryMessages.NumberOfChildrens);
+        }else if(allParams.NumberOfChildrens > 3){
+            reject(allMessages.InvalidMessages.NumberOfChildrens);
+        }else if(allParams.NumberOfChildrens > 0 && !allParams.ChildOne.Name){
+            reject("ChildOne - " + allMessages.MandatoryMessages.ChildName);
+        }else if(allParams.NumberOfChildrens > 0 && !allParams.ChildOne.DOB){
+            reject("ChildOne - " + allMessages.MandatoryMessages.ChildDOB);
+        }else if(new Date(allParams.ChildOne.ChildDOB) > new Date()){
+            reject("ChildOne - " + allMessages.InvalidMessages.ChildDOB);
+        }else if(allParams.NumberOfChildrens > 0 && !allParams.ChildOne.Gender){
+            reject("ChildOne - " + allMessages.MandatoryMessages.ChildGender);
+        }else if(allParams.NumberOfChildrens > 0 && !commonFuncAndObj.isValidOption(allParams.ChildOne.Gender,commonFuncAndObj.Gender)){
+            reject("ChildOne - " + allMessages.InvalidMessages.ChildGender);
+        }else if(allParams.NumberOfChildrens > 1 && !allParams.ChildTwo.Name){
+                reject("ChildTwo - " + allMessages.MandatoryMessages.ChildName);
+        }else if(allParams.NumberOfChildrens > 1 && !allParams.ChildTwo.DOB){
+            reject("ChildTwo - " + allMessages.MandatoryMessages.ChildDOB);
+        }else if(new Date(allParams.ChildTwo.ChildDOB) > new Date()){
+            reject("ChildTwo - " + allMessages.InvalidMessages.ChildDOB);
+        }else if(allParams.NumberOfChildrens > 1 && !allParams.ChildTwo.Gender){
+            reject("ChildTwo" + allMessages.MandatoryMessages.ChildGender);
+        }else if(allParams.NumberOfChildrens > 1 && !commonFuncAndObj.isValidOption(allParams.ChildTwo.Gender,commonFuncAndObj.Gender)){
+            reject("ChildTwo - " + allMessages.InvalidMessages.ChildGender);
+        }else if(allParams.NumberOfChildrens > 2 && !allParams.ChildThree.Name){
+            reject("ChildThree - " + allMessages.MandatoryMessages.ChildName);
+        }else if(allParams.NumberOfChildrens > 2 && !allParams.ChildThree.DOB){
+            reject("ChildThree - " + allMessages.MandatoryMessages.ChildDOB);
+        }else if(new Date(allParams.ChildThree.ChildDOB) > new Date()){
+            reject("ChildThree - " + allMessages.InvalidMessages.ChildDOB);
+        }else if(allParams.NumberOfChildrens > 2 && !allParams.ChildThree.Gender){
+            reject("ChildThree - " + allMessages.MandatoryMessages.ChildGender);
+        }else if(allParams.NumberOfChildrens > 2 && !commonFuncAndObj.isValidOption(allParams.ChildThree.Gender,commonFuncAndObj.Gender)){
+            reject("ChildThree - " + allMessages.InvalidMessages.ChildGender);
+        }else resolve(null);
+        
+        
+    }).then(()=>{
+        return agentDetailsCollection.find({"AgentID":allParams.UpdatedBy});
+    }).then((agentdetails)=>{
+        if(!agentdetails.length){
+            throw allMessages.InvalidMessages.UpdatedBy;
+        }else return leadCollection.find({"LeadID":allParams.LeadID});
+    }).then((leadDetails) =>{
+        if(!leadDetails.length){
+            throw allMessages.InvalidMessages.LeadID;
+        }else if(leadDetails[0].PersonalInfo.MaritalStatus == "Single"){
+            leadDetails     =   leadDetails[0];
+            leadDetails.FamilyInfo      = {
+                "SpouseName"            :   "",
+                "SpouseOcccupation"     :   "",
+                "SpouseDOB"             :   "",
+                "MarriageDate"          :   "",
+                "NumberOfChildrens"     :   0,
+                "ChildOne"              :   {
+                    "Name"              :   "",
+                    "DOB"               :   "",
+                    "Gender"            :   ""
+                },   
+                "ChildTwo"              :   {
+                    "Name"              :   "",
+                    "DOB"               :   "",
+                    "Gender"            :   ""
+                },  
+                "ChildThree"            :   {
+                    "Name"              :   "",
+                    "DOB"               :   "",
+                    "Gender"            :   ""
+                }        
+            };
+
+            return leadCollection.findOneAndUpdate({"LeadID" : allParams.LeadID},leadDetails);
+        }else{
+            leadDetails     =   leadDetails[0];
+            leadDetails.FamilyInfo      = {
+                "SpouseName"            :   allParams.SpouseName,
+                "SpouseOcccupation"     :   allParams.SpouseOcccupation,
+                "SpouseDOB"             :   allParams.SpouseDOB,
+                "MarriageDate"          :   allParams.MarriageDate,
+                "NumberOfChildrens"     :   allParams.NumberOfChildrens,
+                "ChildOne"              :   {
+                    "Name"              :   allParams.ChildOne.Name,
+                    "DOB"               :   allParams.ChildOne.DOB,
+                    "Gender"            :   allParams.ChildOne.Gender
+                },   
+                "ChildTwo"              :   {
+                    "Name"              :   allParams.ChildTwo.Name,
+                    "DOB"               :   allParams.ChildTwo.DOB,
+                    "Gender"            :   allParams.ChildTwo.Gender
+                },  
+                "ChildThree"            :   {
+                    "Name"              :   allParams.ChildTwo.Name,
+                    "DOB"               :   allParams.ChildTwo.DOB,
+                    "Gender"            :   allParams.ChildTwo.Gender
+                }        
+            };
+
+            return leadCollection.findOneAndUpdate({"LeadID" : allParams.LeadID},leadDetails);
+        }
+    }).then((updatedLead)=>{
+        if(!updatedLead){
+            res.status(200).json({status : false, message : "Something went wrong.", data : updatedLead});
+        }else{
+            res.status(200).json({status : true, message : "Success", data : updatedLead});
+        }
+    }).catch((err)=>{
+        res.status(400).json({status : false, message : err, data : null});
+    })
+}
+
+module.exports          =   {updateLeadPersonalDetails,updateMeetingInfo,updateFamilyInfo};
