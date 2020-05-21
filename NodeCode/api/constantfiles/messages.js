@@ -85,9 +85,12 @@ module.exports = {
         "NumberOfChildrens"     :   "NumberOfChildrens" + mandatoryString,
         "ChildName"             :   "ChildName"    +   mandatoryString,
         "ChildDOB"              :   "ChildDOB"  +   mandatoryString,
-        "ChildGender"           :   "ChildGender"   +   mandatoryString
-
-
+        "ChildGender"           :   "ChildGender"   +   mandatoryString,
+        "LeadID"                :   "LeadID" + mandatoryString,
+        "CallDisposition"       :   "CallDisposition" + mandatoryString,
+        "CallSubDisposition"    :   "CallSubDisposition" + mandatoryString,
+        "CallDate"              :   "CallDate" + mandatoryString,
+        "CallTime"              :   "CallTime" + mandatoryString
     },
     "AlreadyExistMessages"      :   {
         "AgentMailExist"        :   "Agent email already exist.",

@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 /* CORS */
 
 app.use('/apidocs', express.static('apidocs'));
-
+app.use('/uploads', express.static('uploads'));//Image folder
 
 app.use('/', routes);
 app.post('/callback', function (req, res) {
