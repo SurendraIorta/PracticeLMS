@@ -137,6 +137,7 @@
                 label="Allocated To"
                 required
                 class="whiteback"
+                :disabled="agentSelectorDisabled"
             ></v-select>
 
             <div class="btn_container">
@@ -181,6 +182,8 @@ export default {
             menu1: false,
             menu2: false,
 
+            agentSelectorDisabled:  false,
+
             loggedInAgent:"A309090",
             isReferenceLead:'',
             referenceMobile:'',
@@ -202,7 +205,6 @@ export default {
                 v => !!v || 'Name is required',
                 v => (v && v.length <= 10) || 'Name must be less than 10 characters.',
             ],
-            
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /.+@.+\..+/.test(v) || 'E-mail must be valid.',
@@ -216,7 +218,7 @@ export default {
                 v => !!v || 'Age is required',
                 v => (v && (v > 0 && v <= 60)) ||  'Age should not be more than 60.'
             ],
-            select: null,
+           
             campaignOptions: ["New Customer","Reference"],
             leadTypeOptions: ["New Customer", "Orphan Customer","Own Acquired Customer","Reference"],
             genderOptions:  ["Male","Female","Other"],
@@ -280,6 +282,11 @@ export default {
         axios.get('http://localhost:3003/agentdetails/getreportingagentlist/'+this.loggedInAgent)
         .then((res)=>{
             console.log(res);
+            if(res.data.data.length > 0){
+                console.log("Agent list found");
+            }else{
+                this.agentSelectorDisabled   =   true;
+            }
         }).catch((err)=>{
             console.log(err.message);
             alert(err);
