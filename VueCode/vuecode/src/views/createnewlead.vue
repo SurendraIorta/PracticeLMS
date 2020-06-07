@@ -1,5 +1,8 @@
 <template>
     <div class="inpage_container">
+        <v-card raised>
+            <v-card-title style="text-align:center;" >Create New Lead </v-card-title>
+        </v-card>
         <v-form ref="form" v-model="valid">
             <v-select
                 v-model="isReferenceLead"
@@ -133,6 +136,8 @@
             <v-select
                 v-model="allocatedAgent"
                 :items="agentList"
+                :item-text="agentDetailText"
+                item-value="AgentID"
                 :rules="[v => !!v || 'Agent selection is required']"
                 label="Allocated To"
                 required
@@ -170,6 +175,7 @@
 
 <script>
 var axios       =   require('axios');
+import allUrl from './../constants/allurls';
 export default {
     data(){
         return {
@@ -218,7 +224,7 @@ export default {
                 v => !!v || 'Age is required',
                 v => (v && (v > 0 && v <= 60)) ||  'Age should not be more than 60.'
             ],
-           
+
             campaignOptions: ["New Customer","Reference"],
             leadTypeOptions: ["New Customer", "Orphan Customer","Own Acquired Customer","Reference"],
             genderOptions:  ["Male","Female","Other"],
@@ -228,6 +234,9 @@ export default {
        }
     }, 
     methods: {
+      agentDetailText(item){
+          return item.FirstName + " ("+ item.AgentID +")";
+      },  
       validate () {
         this.$refs.form.validate()
       },
@@ -279,12 +288,17 @@ export default {
       },
     },
     created(){
-        axios.get('http://localhost:3003/agentdetails/getreportingagentlist/'+this.loggedInAgent)
+        axios.get(allUrl.getURL("getAgentDetails")+'/'+this.loggedInAgent)
         .then((res)=>{
             console.log(res);
-            if(res.data.data.length > 0){
+            this.agentSelectorDisabled   =   false;
+            if(Array.isArray(res.data.data) && res.data.data.length > 0){
                 console.log("Agent list found");
+                this.agentList               =   res.data.data;
+            }else if(res.data.data){
+                    this.agentList  = [res.data.data];
             }else{
+                this.agentList  = [];
                 this.agentSelectorDisabled   =   true;
             }
         }).catch((err)=>{
