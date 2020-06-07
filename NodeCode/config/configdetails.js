@@ -6,7 +6,8 @@ module.exports = {
     },
     db : {
         mongo : {
-            uri:"mongodb://127.0.0.1:27017/practicelms",
+            // uri:"mongodb://127.0.0.1:27017/practicelms",
+            uri:"mongodb+srv://lmsdb:lmsDB@2020@practicelms-9zrk8.mongodb.net/practicelms?retryWrites=true&w=majority",
             options: {
                 useNewUrlParser: true,
                 useCreateIndex: true,
