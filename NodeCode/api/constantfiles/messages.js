@@ -90,7 +90,8 @@ module.exports = {
         "CallDisposition"       :   "CallDisposition" + mandatoryString,
         "CallSubDisposition"    :   "CallSubDisposition" + mandatoryString,
         "CallDate"              :   "CallDate" + mandatoryString,
-        "CallTime"              :   "CallTime" + mandatoryString
+        "CallTime"              :   "CallTime" + mandatoryString,
+        "ReferMobile"           :   "Reference Mobile" + mandatoryString
     },
     "AlreadyExistMessages"      :   {
         "AgentMailExist"        :   "Agent email already exist.",
