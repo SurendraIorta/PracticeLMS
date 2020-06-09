@@ -11,6 +11,7 @@
                 label="Is Reference Lead"
                 required
                 class="whiteback"
+                @change="checkRefValue"
             ></v-select>
 
             <v-text-field
@@ -22,6 +23,7 @@
                 required
                 class="whiteback"
                 v-if="isReferenceLead == 'Yes'"
+                @change="getReferenceDetails()"
             ></v-text-field>
 
             <v-text-field
@@ -76,8 +78,8 @@
                 class="whiteback"
             ></v-text-field>
 
-            <v-radio-group v-model="row" row  class="radioback">
-                <v-radio v-for="opt in genderOptions" :key="opt" :label="`${opt}`" :value="opt"></v-radio>
+            <v-radio-group v-model="gender" row  class="radioback" id="radiogrp">
+                <v-radio v-for="opt in genderOptions" :key="opt" :label="`${opt}`" :value="opt" ></v-radio>
              </v-radio-group>
 
             <v-menu
@@ -99,6 +101,7 @@
                     @blur="date = parseDate(dateFormatted)"                    
                     v-on="on"
                     class="whiteback"
+                    @change="updateAge($event)"
                     ></v-text-field>
                 </template>
                 <v-date-picker v-model="date" no-title @input="menu1 = false" @change="updateAge($event)"></v-date-picker>
@@ -123,8 +126,8 @@
                 required
                 class="whiteback"
             ></v-select>
-
-             <v-select
+            
+            <v-select
                 v-model="campaign"
                 :items="campaignOptions"
                 :rules="[v => !!v || 'Campaign is required']"
@@ -150,7 +153,7 @@
                     :disabled="!valid"
                     color="success"
                     class="mr-4 centerbtn"
-                    @click="validate"
+                    @click="createNewLead"
                 >   Submit
                 </v-btn>
 
@@ -161,12 +164,12 @@
                 >   Reset Form
                 </v-btn>
 
-                <v-btn
+                <!--v-btn
                     color="warning"
                     class="centerbtn"
                     @click="resetValidation"
                 >   Reset Validation
-                </v-btn>
+                </v-btn-->
             </div>
            
         </v-form>
@@ -176,6 +179,7 @@
 <script>
 var axios       =   require('axios');
 import allUrl from './../constants/allurls';
+import commonFunctions from './../constants/commonFunctions';
 export default {
     data(){
         return {
@@ -194,13 +198,15 @@ export default {
             isReferenceLead:'',
             referenceMobile:'',
             referenceName:'',
+            referenceLeadID:'',
             firstName: '',
             middleName: '',
             lastName: '',
             date_of_birth: '',
             email: '',
             mobile: '',
-            age:'',
+            age:'0',
+            gender:'',
             campaign:'',
             leadType:'',
             allocatedAgent:'',
@@ -218,7 +224,7 @@ export default {
             mobileRules: [
                 v => !!v || 'Mobile is required',
                 v => (v && v.toString().length === 10) || 'Mobile number should be of 10 digits.',
-                v => /(7|8|9)\d{9}/.test(v) || 'Mobile number is not valid.'
+                // v => /(6|7|8|9)\d{9}/.test(v) || 'Mobile number is not valid.'
             ],
             ageRules: [
                 v => !!v || 'Age is required',
@@ -234,12 +240,69 @@ export default {
        }
     }, 
     methods: {
+      createNewLead () {
+        if(this.$refs.form.validate()){
+            let newLeadData     =   {
+                    "LeadType"        :   this.leadType,
+                    "Campaign"        :   this.campaign,
+                    "AllocatedTo"     :   this.allocatedAgent,
+                    "AllocatedBy"     :   this.loggedInAgent,
+                    "IsReferenceLead" :   this.isReferenceLead == "Yes" ? true : false ,
+                    "RefferedBy"      :   this.referenceLeadID,
+                    "FirstName"       :   this.firstName,
+                    "LastName"        :   this.lastName,
+                    "MiddleName"      :   this.middleName,
+                    "ContactNumber"   :   this.mobile,
+                    "Gender"          :   this.gender,
+                    "DateOfBirth"     :   this.date_of_birth ? this.date_of_birth : this.dateFormatted
+            };
+
+            console.log(newLeadData);
+
+            axios.post(allUrl.getURL("createNewLead"),newLeadData)
+            .then((res)=>{
+                console.log(res);
+            }).catch((err)=>{
+                console.log(err);
+                alert(err);
+            })
+        }
+      },
+      getReferenceDetails(){
+        if(commonFunctions.isNetworkConnected){
+            axios.post(allUrl.getURL("getRefLeadDetails"),{
+                "mobile"    :   this.referenceMobile
+            })
+            .then((res)=>{
+                console.log(res);
+                if(res.data.data && res.data.data.length > 0){
+                    // this.referenceName  =   res.d
+                    console.log(res);
+                }else{
+                    alert(res.data.message);
+                }
+            })
+            .catch((err)=>{
+                console.log(err);
+                alert(err);
+            })
+        }else{
+            alert("You are not connected to internet.","Internet Issue");
+        }
+      },
+      checkRefValue() {
+          if(this.isReferenceLead == "No"){
+              this.referenceLeadID      =   '';
+              this.referenceMobile      =   '';
+              this.referenceName        =   '';
+          }
+      },
+      changeGender(){
+          console.log("$event = ",this.$event,"gender = ",this.gender);
+      },
       agentDetailText(item){
           return item.FirstName + " ("+ item.AgentID +")";
       },  
-      validate () {
-        this.$refs.form.validate()
-      },
       reset () {
         this.$refs.form.reset()
       },
@@ -267,6 +330,9 @@ export default {
         var birthDate = new Date(dateString);
         if(today.getFullYear() <= birthDate.getFullYear() && today.getMonth() <= birthDate.getMonth() && today.getDate() <= birthDate.getDate() ){
             alert("Please Enter valid date");
+            this.date_of_birth  =   new Date();
+            this.dateFormatted  =   this.formatDate(new Date().toISOString().substr(0, 10));
+            this.age            =   0;
         }else{
             var age = today.getFullYear() - birthDate.getFullYear();
             var m = today.getMonth() - birthDate.getMonth();
@@ -288,23 +354,30 @@ export default {
       },
     },
     created(){
-        axios.get(allUrl.getURL("getAgentDetails")+'/'+this.loggedInAgent)
-        .then((res)=>{
-            console.log(res);
-            this.agentSelectorDisabled   =   false;
-            if(Array.isArray(res.data.data) && res.data.data.length > 0){
-                console.log("Agent list found");
-                this.agentList               =   res.data.data;
-            }else if(res.data.data){
-                    this.agentList  = [res.data.data];
-            }else{
-                this.agentList  = [];
-                this.agentSelectorDisabled   =   true;
-            }
-        }).catch((err)=>{
-            console.log(err.message);
-            alert(err);
-        });
+        if(!navigator.onLine){
+            this.agentSelectorDisabled   =   true;
+            alert("You are not connected to internet.","Internet Issue")
+        }else{
+            axios.get(allUrl.getURL("getReportingAgentList")+'/'+this.loggedInAgent)
+            .then((res)=>{
+                console.log(res);
+                this.agentSelectorDisabled   =   false;
+                if(Array.isArray(res.data.data) && res.data.data.length > 0){
+                    console.log("Agent list found");
+                    this.agentList               =   res.data.data;
+                }
+                // else if(res.data && res.data.data && res.data.data){
+                //         this.agentList  = [res.data.data];
+                // }
+                else{
+                    this.agentList  = [];
+                    this.agentSelectorDisabled   =   true;
+                }
+            }).catch((err)=>{
+                console.log(err.message);
+                alert(err);
+            });
+        }
     }
 }
 </script>
