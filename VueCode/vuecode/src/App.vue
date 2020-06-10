@@ -2,19 +2,23 @@
   <v-app>
 
     <v-content>
-      <createnewlead/>
+      <!-- <createnewlead/> -->
+      <createagent/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import createnewlead from './views/createnewlead';
+// import createnewlead from './views/createnewlead';
+import createagent from './views/agentdetails/createnewagent';
+  
 
 export default {
   name: 'App',
 
   components: {
-    createnewlead,
+    // createnewlead,
+    createagent,
   },
 
   data: () => ({
