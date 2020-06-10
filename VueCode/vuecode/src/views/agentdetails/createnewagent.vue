@@ -52,7 +52,7 @@ export default {
 
             req.append("name","testformdata");
             req.append("price","300");
-            req.append("productImage",this.userPhotoImg);
+            req.append("productImage",this.userPhoto);
 
             axios.post("http://localhost:3003/testcode/uploadfile",req)
             .then((res)=>{
