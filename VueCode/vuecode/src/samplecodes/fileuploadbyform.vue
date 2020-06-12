@@ -37,31 +37,6 @@ var axios =   require('axios');
 export default {
     data(){
         return {
-            "AgentID"           : "A309092",
-            "FirstName"         : "Admin",
-            "MiddleName"        : "",
-            "LastName"          : "",
-            "Gender"            : "",
-            "ContactNumber"     : "9999999999",
-            "OtherContactNumber": "9930293939",
-            "Email"             : "adminpem@lmspractice.in",
-            "MaritalStatus"     : "",
-            "PanNumber"         : "",
-            "Address1"          : "Head Office",
-            "Address2"          : "2nd floor, D Block",
-            "Address3"          : "Parsi road",
-            "City"              : "Mumbai",
-            "State"             : "Maharashtra",
-            "Country"           : "India",
-            "BranchName"        : "HO",
-            "Department"        : "HO",
-            "ManagerID"         : "A309090",
-            "DateOfBirth"       : null,
-            "Age"               : null,
-            "Photo"             : "",
-            "Designation"       : "",
-
-
             valid:false,
             userPhoto:null,
             userPhotoImg:null,
