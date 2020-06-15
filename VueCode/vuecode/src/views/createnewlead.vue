@@ -3,10 +3,10 @@
         <v-card raised>
             <v-card-title style="text-align:center;" >Create New Lead </v-card-title>
         </v-card>
-        <v-form ref="form" v-model="valid">
+        <v-form ref="form" v-model="valid" ><!--style="background: #FFFFFF;"-->
             <v-select
                 v-model="isReferenceLead"
-                :items="yesNoOptions"
+                :items="allListOptions.yesNoOptions"
                 :rules="[v => !!v || 'Please select if this is reference lead or not']"
                 label="Is Reference Lead"
                 required
@@ -17,7 +17,7 @@
             <v-text-field
                 v-model="referenceMobile"
                 :counter="10"
-                :rules="mobileRules"
+                :rules="allListOptions.mobileRules"
                 :type="mobile"
                 label="Reference Mobile Number"
                 required
@@ -29,7 +29,7 @@
             <v-text-field
                 v-model="referenceName"
                 :disabled="true"
-                :rules="nameRules"
+                :rules="allListOptions.nameRules"
                 label="Reference Name"
                 required
                 class="whiteback"
@@ -38,7 +38,7 @@
 
             <v-text-field
                 v-model="firstName"
-                :rules="nameRules"
+                :rules="allListOptions.nameRules"
                 label="First Name"
                 required
                 class="whiteback"
@@ -46,7 +46,7 @@
 
             <v-text-field
                 v-model="middleName"
-                :rules="nameRules"
+                :rules="allListOptions.nameRules"
                 label="Middle Name"
                 required
                 class="whiteback"
@@ -54,7 +54,7 @@
 
             <v-text-field
                 v-model="lastName"
-                :rules="nameRules"
+                :rules="allListOptions.nameRules"
                 label="Last Name"
                 required
                 class="whiteback"
@@ -63,7 +63,7 @@
             <v-text-field
                 v-model="mobile"
                 :counter="10"
-                :rules="mobileRules"
+                :rules="allListOptions.mobileRules"
                 :type="mobile"
                 label="Mobile Number"
                 required
@@ -72,14 +72,14 @@
 
             <v-text-field
                 v-model="email"
-                :rules="emailRules"
+                :rules="allListOptions.emailRules"
                 label="E-mail"
                 required
                 class="whiteback"
             ></v-text-field>
 
             <v-radio-group v-model="gender" row  class="radioback" id="radiogrp">
-                <v-radio v-for="opt in genderOptions" :key="opt" :label="`${opt}`" :value="opt" ></v-radio>
+                <v-radio v-for="opt in allListOptions.genderOptions" :key="opt" :label="`${opt}`" :value="opt" ></v-radio>
              </v-radio-group>
 
             <v-menu
@@ -110,7 +110,7 @@
             <v-text-field
                 v-model="age"
                 :counter="2"
-                :rules="ageRules"
+                :rules="allListOptions.ageRules"
                 type="number"
                 :disabled="true"
                 label="Age"
@@ -120,7 +120,7 @@
 
             <v-select
                 v-model="leadType"
-                :items="leadTypeOptions"
+                :items="allListOptions.leadTypeOptions"
                 :rules="[v => !!v || 'Please select if this is reference lead or not']"
                 label="Lead Type"
                 required
@@ -129,7 +129,7 @@
             
             <v-select
                 v-model="campaign"
-                :items="campaignOptions"
+                :items="allListOptions.campaignOptions"
                 :rules="[v => !!v || 'Campaign is required']"
                 label="Campaign"
                 required
@@ -180,13 +180,11 @@
 var axios       =   require('axios');
 import allUrl from './../constants/allurls';
 import commonFunctions from './../constants/commonFunctions';
+import allListOptions  from './../constants/listOptions';
 export default {
     data(){
         return {
-            yesNoOptions:[
-                "Yes",
-                "No"
-            ],
+            
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
@@ -213,27 +211,7 @@ export default {
             agentList:[],
 
             valid: true,
-            nameRules: [
-                v => !!v || 'Name is required',
-                v => (v && v.length <= 10) || 'Name must be less than 10 characters.',
-            ],
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+\..+/.test(v) || 'E-mail must be valid.',
-            ],
-            mobileRules: [
-                v => !!v || 'Mobile is required',
-                v => (v && v.toString().length === 10) || 'Mobile number should be of 10 digits.',
-                // v => /(6|7|8|9)\d{9}/.test(v) || 'Mobile number is not valid.'
-            ],
-            ageRules: [
-                v => !!v || 'Age is required',
-                v => (v && (v > 0 && v <= 60)) ||  'Age should not be more than 60.'
-            ],
-
-            campaignOptions: ["New Customer","Reference"],
-            leadTypeOptions: ["New Customer", "Orphan Customer","Own Acquired Customer","Reference"],
-            genderOptions:  ["Male","Female","Other"],
+            allListOptions:allListOptions,
             row:null
 
 
@@ -354,6 +332,7 @@ export default {
       },
     },
     created(){
+        console.log(allListOptions);
         if(!navigator.onLine){
             this.agentSelectorDisabled   =   true;
             alert("You are not connected to internet.","Internet Issue")

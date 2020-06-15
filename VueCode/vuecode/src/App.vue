@@ -1,7 +1,7 @@
 <template>
   <v-app>
 
-    <v-content>
+    <v-content class="bg_img">
       <!-- <createnewlead/> -->
       <createagent/>
     </v-content>
@@ -26,3 +26,9 @@ export default {
   }),
 };
 </script>
+
+<style scoped>
+.bg_img {
+  background-image: url('./assets/BG_Insurance.png');
+}
+</style>
