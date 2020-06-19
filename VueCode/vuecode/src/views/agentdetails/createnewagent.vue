@@ -8,164 +8,298 @@
 
         >
             <v-card>
-                <v-card-title> Select the Branch and Department to create an Agent. </v-card-title>
-                
-                <v-form v-model="validBranchDepartment" style="align-items: center;justify-items: center;">
-                <v-select 
-                    v-model="agentDetails.BranchName"
-                    :items="branchList"
-                    @change="getDepartmentOnBranch"
-                    label="Branch Name"
-                    class="diaselectbox"
-                    required
-                ></v-select>
-                <v-select 
-                    v-model="agentDetails.Department"
-                    :items="branchList"
-                    @change="getDepartmentOnBranch"
-                    label="Department Name"
-                    class="diaselectbox"
-                    required
-                ></v-select>
-                
+                <v-card-title> Please make sure you have all reqquired data to create an agent. </v-card-title>
                 <div class="centerbtn" style="padding: 20px;">
                  <v-btn 
                     @click="dialog = false" 
                     class="centerbtn"
                     color="success"
-                    :disabled="!validBranchDepartment"
                  >Done</v-btn>
                 </div>
-                </v-form>
             </v-card>
         </v-dialog>
-        <v-form ref="form" v-model="valid">
-            <v-text-field
-                v-model="agentDetails.FirstName"
-                :rules="allListOptions.nameRules"
-                label="First Name"
-                required
-                class="whiteback"
-            ></v-text-field>
-
-            <v-text-field
-                v-model="agentDetails.MiddleName"
-                :rules="allListOptions.nameRules"
-                label="Middle Name"
-                required
-                class="whiteback"
-            ></v-text-field>
-
-            <v-text-field
-                v-model="agentDetails.LastName"
-                :rules="allListOptions.nameRules"
-                label="Last Name"
-                required
-                class="whiteback"
-            ></v-text-field>
-
-            <v-text-field
-                v-model="agentDetails.ContactNumber"
-                :counter="10"
-                :rules="allListOptions.mobileRules"
-                type="mobile"
-                label="Mobile Number"
-                required
-                class="whiteback"
-            ></v-text-field>
-
-            <v-text-field
-                v-model="agentDetails.OtherContactNumber"
-                :counter="10"
-                :rules="allListOptions.mobileRules"
-                type="mobile"
-                label="Other Mobile Number"
-                required
-                class="whiteback"
-            ></v-text-field>
-
-            <v-text-field
-                v-model="agentDetails.Email"
-                :rules="allListOptions.emailRules"
-                label="E-mail"
-                required
-                class="whiteback"
-            ></v-text-field>
-
-            <v-radio-group v-model="agentDetails.Gender" row  class="radioback" id="radiogrp">
-                <v-radio v-for="opt in allListOptions.genderOptions" :key="opt" :label="`${opt}`" :value="opt" ></v-radio>
-             </v-radio-group>
-
-            <v-menu
-                ref="menu1"
-                v-model="menu1"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
+        <v-form ref="form" v-model="valid" >
+            <v-tabs 
+                v-model="tabnum" 
+                @change="changeTab"
+                :centered="true"
                 
+            >
+                <v-tab 
+                v-for="tabname in tabnames"
+                :key="tabname"
                 >
-                <template v-slot:activator="{ on }">
+                    {{tabname}}
+                </v-tab>
+            </v-tabs>    
+            <v-tabs-items v-model="tabnum" style="background-color:#04818f;"><!--#04818f/0ba7b7-->
+              <v-tab-item>  
+                <v-text-field
+                    v-model="agentDetails.FirstName"
+                    :rules="allListOptions.nameRules"
+                    label="First Name"
+                    required
+                    class="whiteback"
+                ></v-text-field>
+
+                <v-text-field
+                    v-model="agentDetails.MiddleName"
+                    :rules="allListOptions.nameRules"
+                    label="Middle Name"
+                    required
+                    class="whiteback"
+                ></v-text-field>
+
+                <v-text-field
+                    v-model="agentDetails.LastName"
+                    :rules="allListOptions.nameRules"
+                    label="Last Name"
+                    required
+                    class="whiteback"
+                ></v-text-field>
+
+                
+                <v-radio-group v-model="agentDetails.Gender" row  class="radioback" id="radiogrp" prepend-icon="mdi-human-male-female">
+                    <v-radio v-for="opt in allListOptions.genderOptions" :key="opt" :label="`${opt}`" :value="opt" ></v-radio>
+                </v-radio-group>
+
+                <v-menu
+                    ref="menu1"
+                    v-model="menu1"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                    
+                    >
+                    <template v-slot:activator="{ on }">
+                        
+                        <v-text-field
+                        v-model="dateFormatted"
+                        label="Date of Birth"
+                        hint="MM/DD/YYYY"
+                        persistent-hint
+                        @blur="date = parseDate(dateFormatted)"                    
+                        v-on="on"
+                        class="whiteback"
+                        @change="updateAge($event)"
+                        prepend-icon="mdi-calendar"
+                        ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="agentDetails.DateOfBirth" no-title @input="menu1 = false" @change="updateAge($event)"></v-date-picker>
+                </v-menu>
+
+                <v-text-field
+                    v-model="agentDetails.Age"
+                    :counter="2"
+                    :rules="allListOptions.ageRules"
+                    type="number"
+                    :disabled="true"
+                    label="Age"
+                    required
+                    class="whiteback"
+                ></v-text-field>
+
+                
+                <v-select
+                    label="Marital Status*"
+                    :items="maritalStatusList"
+                    v-model="agentDetails.MaritalStatus"
+                    required
+                    class="whiteback"
+                ></v-select>
+
+                <v-text-field 
+                    v-model="agentDetails.PanNumber"    
+                    label="PAN Number"    
+                    class="whiteback">
+
+
+                </v-text-field>
+
+                <div class="foottab_btns">
+                    <v-btn
+                    @click="tabnum = 1"
+                    class="foot_btn"
+                    >Next
+                    </v-btn>
+                </div>
+                </v-tab-item>
+
+                <v-tab-item>
                     <v-text-field
-                    v-model="dateFormatted"
-                    label="Date of Birth"
-                    hint="MM/DD/YYYY"
-                    persistent-hint
-                    @blur="date = parseDate(dateFormatted)"                    
-                    v-on="on"
-                    class="whiteback"
-                    @change="updateAge($event)"
+                        v-model="agentDetails.ContactNumber"
+                        :counter="10"
+                        :rules="allListOptions.mobileRules"
+                        type="mobile"
+                        label="Mobile Number"
+                        required
+                        class="whiteback"
                     ></v-text-field>
-                </template>
-                <v-date-picker v-model="date" no-title @input="menu1 = false" @change="updateAge($event)"></v-date-picker>
-            </v-menu>
 
-            <v-text-field
-                v-model="agentDetails.Age"
-                :counter="2"
-                :rules="allListOptions.ageRules"
-                type="number"
-                :disabled="true"
-                label="Age"
-                required
-                class="whiteback"
-            ></v-text-field>
+                    <v-text-field
+                        v-model="agentDetails.OtherContactNumber"
+                        :counter="10"
+                        :rules="allListOptions.mobileRules"
+                        type="mobile"
+                        label="Other Mobile Number"
+                        required
+                        class="whiteback"
+                    ></v-text-field>
 
-            <div class="photo_container">
-                <v-file-input
-                    v-model="userPhoto"
-                    :rules="allListOptions.userPhotoRules"
-                    accept="image/png, image/jpeg, image/bmp"
-                    placeholder="Pick an photo"
-                    prepend-icon="mdi-camera"
-                    label="Select User Photo"
-                    @change="checkSelectedUserPhoto"
-                    class="whiteback"
-                ></v-file-input>
+                    <v-text-field
+                        v-model="agentDetails.Email"
+                        :rules="allListOptions.emailRules"
+                        label="E-mail"
+                        required
+                        class="whiteback"
+                    ></v-text-field>
 
-                <v-img 
-                    :src="userPhotoImg" 
-                    class="whiteback"
-                    v-if="userPhotoImg"
-                ></v-img>
-            </div>
-            <div class="btn_container">
-                <v-btn
-                    :disabled="!valid"
-                    color="success"
-                    class="mr-4 centerbtn"
-                    @click="createNewAgent"
-                >   Submit
-                </v-btn>
 
-            </div>
+                    <v-text-field
+                        v-model="agentDetails.Address1"
+                        :counter="20"
+                        label="Address 1"
+                        required
+                        class="whiteback"
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="agentDetails.Address2"
+                        :counter="20"
+                        label="Address 2"
+                        class="whiteback"
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="agentDetails.Address3"
+                        :counter="20"
+                        label="Address 3"
+                        class="whiteback"
+                    ></v-text-field>
+
+                    <v-select 
+                        label="Country"
+                        :items="countryList"
+                        item-text="name"
+                        item-value="code"
+                        v-model="agentDetails.Country"
+                        required
+                        class="whiteback"
+                    ></v-select>
+
+                    <v-select
+                    label="State"
+                        :items="stateList"
+                        item-text="name"
+                        item-value="code"
+                        v-model="agentDetails.State"
+                        required
+                        class="whiteback"
+                    ></v-select>
+
+                    <v-select
+                    label="City"
+                        :items="cityList"
+                        item-text="name"
+                        item-value="code"
+                        v-model="agentDetails.City"
+                        required
+                        class="whiteback"
+                    ></v-select>
+                    <div class="foottab_btns">
+                        <v-btn
+                        @click="tabnum = 0"
+                        class="foot_btn"
+                        >Previous
+                        </v-btn>
+                        <v-btn
+                        @click="tabnum = 2"
+                        class="foot_btn"
+                        >Next
+                        </v-btn>
+                    </div>
+                </v-tab-item>
+
+                <v-tab-item>
+
+                    <v-select
+                        label="Designation"
+                        :items="designationList"
+                        v-model="agentDetails.Designation"
+                        required
+                        class="whiteback"
+                    ></v-select>
+
+                     <v-select
+                        label="Branch Name"
+                        :items="branchList"
+                        v-model="agentDetails.BranchName"
+                        required
+                        class="whiteback"
+                    ></v-select>
+
+                    <v-select
+                        label="Department Name"
+                        :items="departmentList"
+                        v-model="agentDetails.Department"
+                        required
+                        class="whiteback"
+                    ></v-select>
+
+                    <v-select
+                        label="Manager Name"
+                        :items="managerList"
+                        item-text="formatedManagerName"
+                        item-value="AgentID"
+                        v-model="agentDetails.ManagerID"
+                        required
+                        class="whiteback"
+                    ></v-select>
+
+                    <div class="photo_container">
+                        <v-file-input
+                            v-model="userPhoto"
+                            :rules="allListOptions.userPhotoRules"
+                            accept="image/png, image/jpeg, image/bmp"
+                            placeholder="Pick an photo"
+                            prepend-icon="mdi-camera"
+                            label="Select User Photo"
+                            @change="checkSelectedUserPhoto"
+                            class="whiteback"
+                        ></v-file-input>
+
+                        <v-img 
+                            :src="userPhotoImg" 
+                            class="whiteback"
+                            v-if="userPhotoImg"
+                        ></v-img>
+                    </div>
+                    <div class="btn_container">
+                        <v-btn
+                            @click="tabnum = 1"
+                            class="foot_btn"
+                        >Previous
+                        </v-btn>
+                        <v-btn
+                            :disabled="!valid"
+                            color="success"
+                            class="mr-4 foot_btn"
+                            @click="createNewAgent"
+                        >   Submit
+                        </v-btn>
+
+                    </div>
+                </v-tab-item>
+            </v-tabs-items>
         </v-form>
     </div>
 </template>
 <script>
 var axios =   require('axios');
 import allListOptions from './../../constants/listOptions';
+import allUrl from './../../constants/allurls';
 export default {
     data(){
         return {
@@ -174,6 +308,8 @@ export default {
             menu1: false,
             menu2: false,
 
+            tabnum:null,
+            tabnames:["Personal Info","Contact Info","Manager Selection"],
 
             agentDetails:{
                 "AgentID"           : "A309092",
@@ -201,7 +337,14 @@ export default {
                 "Designation"       : "",
             },
             branchList:["Mumbai","Hyderabad"],
-            departmentList:[],
+            departmentList:["Field","Account"],
+            countryList:[{"code":1,"name":"India"}],
+            stateList:[{"code":1,"name":"Telangana"}],
+            cityList:[{"code":1,"name":"Hyderabad"}],
+            maritalStatusList:["Single","Married"],
+            designationList:["Agent","Manager"],
+            managerList:[],
+
             dialog:false,
             valid:false,
             validBranchDepartment:false,
@@ -213,19 +356,18 @@ export default {
     },
     methods:{
         createNewAgent(){
-            var req     =   new FormData();
+            this.agentDetails.Photo =   this.userPhotoImg;
+            this.agentDetails.CreatedBy =   "admin";
+            console.log(this.agentDetails);
 
-            req.append("name","testformdata");
-            req.append("price","300");
-            req.append("productImage",this.userPhoto);
-
-            axios.post("http://localhost:3003/testcode/uploadfile",req)
+            axios.post(allUrl.getURL("createAgent"),this.agentDetails)
             .then((res)=>{
                 console.log(res);
             })
             .catch((err)=>{
                 console.log(err);
             })
+            
         },
         checkSelectedUserPhoto(selectedFile){
             console.log(selectedFile);
@@ -243,38 +385,41 @@ export default {
         getDepartmentOnBranch(event){
             console.log(event);
         },
+        changeTab(event){
+            console.log(event);
+        },
         formatDate (date) {
-        if (!date) return null
+            if (!date) return null
 
-        const [year, month, day] = date.split('-')
-        return `${month}/${day}/${year}`
-      },
-      parseDate (date) {
-        if (!date) return null
+            const [year, month, day] = date.split('-')
+            return `${month}/${day}/${year}`
+        },
+        parseDate (date) {
+            if (!date) return null
 
-        const [month, day, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      },
-      updateAge(event){
-          this.age  =   this.calculateAge(event)
-      },
-      calculateAge(dob){
-        var dateString = dob;
-        var today = new Date();
-        var birthDate = new Date(dateString);
-        if(today.getFullYear() <= birthDate.getFullYear() && today.getMonth() <= birthDate.getMonth() && today.getDate() <= birthDate.getDate() ){
-            alert("Please Enter valid date");
-            this.date_of_birth  =   new Date();
-            this.dateFormatted  =   this.formatDate(new Date().toISOString().substr(0, 10));
-            this.age            =   0;
-        }else{
-            var age = today.getFullYear() - birthDate.getFullYear();
-            var m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
+            const [month, day, year] = date.split('/')
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        },
+        updateAge(event){
+            this.agentDetails.Age  =   this.calculateAge(event)
+        },
+        calculateAge(dob){
+            var dateString = dob;
+            var today = new Date();
+            var birthDate = new Date(dateString);
+            if(today.getFullYear() <= birthDate.getFullYear() && today.getMonth() <= birthDate.getMonth() && today.getDate() <= birthDate.getDate() ){
+                alert("Please Enter valid date");
+                this.date_of_birth  =   new Date();
+                this.dateFormatted  =   this.formatDate(new Date().toISOString().substr(0, 10));
+                this.age            =   0;
+            }else{
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
             }
-            return age;
-        }
       }
     },
     created(){
@@ -349,6 +494,23 @@ export default {
 .centerbtn {
     align-items: center;
     justify-items: center;
+}
+
+.foot_btn {
+    padding: 20px;
+    margin: 10px;
+    width: 20%;
+}
+
+.photo_container {
+    display : inline;
+}
+
+@media screen and (max-width: 480px) {
+    .whiteback {
+         width: 80%;
+         display: flex;
+    }
 }
 
 </style>

@@ -4,6 +4,7 @@
     <v-content class="bg_img">
       <!-- <createnewlead/> -->
       <createagent/>
+        <!-- <tabview/> -->
     </v-content>
   </v-app>
 </template>
@@ -11,6 +12,8 @@
 <script>
 // import createnewlead from './views/createnewlead';
 import createagent from './views/agentdetails/createnewagent';
+// import tabview from './samplecodes/tabview';
+  
   
 
 export default {
@@ -19,6 +22,7 @@ export default {
   components: {
     // createnewlead,
     createagent,
+    // tabview,
   },
 
   data: () => ({
