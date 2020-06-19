@@ -251,7 +251,7 @@
                     <v-select
                         label="Manager Name"
                         :items="managerList"
-                        item-text="formatedManagerName"
+                        :item-text="agentDetailText"
                         item-value="AgentID"
                         v-model="agentDetails.ManagerID"
                         required
@@ -274,6 +274,7 @@
                             :src="userPhotoImg" 
                             class="whiteback"
                             v-if="userPhotoImg"
+                            style="width:100px;height:100px;"
                         ></v-img>
                     </div>
                     <div class="btn_container">
@@ -350,7 +351,7 @@ export default {
             validBranchDepartment:false,
             userPhoto:null,
             userPhotoImg:null,
-            
+            loggedInAgent:"admin",
             allListOptions,
         }
     },
@@ -358,6 +359,7 @@ export default {
         createNewAgent(){
             this.agentDetails.Photo =   this.userPhotoImg;
             this.agentDetails.CreatedBy =   "admin";
+            this.agentDetails.DateOfBirth   =   this.dateFormatted;
             console.log(this.agentDetails);
 
             axios.post(allUrl.getURL("createAgent"),this.agentDetails)
@@ -420,10 +422,35 @@ export default {
                 }
                 return age;
             }
-      }
+      },
+      agentDetailText(item){
+          return item.FirstName + " " + item.LastName + " ("+ item.AgentID +")";
+      },  
     },
     created(){
         this.dialog = false;
+         if(!navigator.onLine){
+            alert("You are not connected to internet.","Internet Issue")
+        }else{
+            axios.get(allUrl.getURL("getReportingAgentList")+'/'+this.loggedInAgent)
+            .then((res)=>{
+                console.log(res);
+                
+                if(Array.isArray(res.data.data) && res.data.data.length > 0){
+                    console.log("Agent list found");
+                    this.managerList               =   res.data.data;
+                }
+                // else if(res.data && res.data.data && res.data.data){
+                //         this.agentList  = [res.data.data];
+                // }
+                else{
+                    this.managerList  = [];
+                }
+            }).catch((err)=>{
+                console.log(err.message);
+                alert(err);
+            });
+        }
     },computed: {
       computedDateFormatted () {
         return this.formatDate(this.date)

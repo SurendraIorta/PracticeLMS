@@ -21,7 +21,7 @@ const allListOptions  =   {
         v => (v && (v > 0 && v <= 60)) ||  'Age should not be more than 60.'
     ],
     userPhotoRules: [
-        value => !value || value.size < 2000000 || 'UserPhoto size should be less than 2 MB!',
+        value => !value || value.size < 1000000 || 'Photo size should be less than 2 MB!',
         v=> v && v.type.includes("image") || "Please select an image file!",
     ],
     
