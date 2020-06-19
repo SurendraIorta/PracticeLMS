@@ -11,7 +11,7 @@ let createNewLead       =   (req,res)=>{
     return new Promise((resolve,reject)=>{
         if(!allParams.LeadType){
             reject(allMessages.MandatoryMessages.LeadType);
-        }else if(allParams.LeadType && !commonFuncAndObj.isValidOption(allParams.LeadType,commonFuncAndObj.LeadType,"Description")){
+        }else if(allParams.LeadType && !commonFuncAndObj.isValidOption(allParams.LeadType,commonFuncAndObj.leadTypeOptions)){
             reject(allMessages.InvalidMessages.LeadType);
         }else if(!allParams.Campaign){
             reject(allMessages.MandatoryMessages.Campaign);
@@ -91,6 +91,7 @@ let createNewLead       =   (req,res)=>{
     }).then((createdLead)=>{
         res.status(200).json({status : true, message : "Success", data : createdLead});
     }).catch((err)=>{
+		console.log(err);
         res.status(400).json({status : false, message : err,data : null});
     })
 

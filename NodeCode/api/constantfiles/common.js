@@ -5,6 +5,7 @@ var commonObj  =   {
    dayEnum   :   ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
    today     :   new Date(),
    Gender    :   ["Male","Female","Transgender"],
+   leadTypeOptions: ["New Customer", "Orphan Customer","Own Acquired Customer","Reference"],
    LeadType  :   [
        {
           "LA_CODE":"REC",
@@ -211,7 +212,9 @@ var commonObj  =   {
        "Protection Plus",
        "NFO",
        "MWPA",
-       "NRI"
+       "NRI",
+	   "New Customer",
+	   "Reference"
     ],
     MaritalStatus:[
        {

@@ -29,6 +29,7 @@ let agentDetails    =   new Schema({
     DateOfBirth     :   Date,
     Age             :   Number,
     Photo           :   String,
+    Designation     :   String,
     CreatedBy       :   {type:String,ref:'agentdetails'},
     UpdatedBy       :   {type:String,ref:'agentdetails'}
 },{
