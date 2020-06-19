@@ -1,5 +1,7 @@
 <template>
-    
+    <div class="inpage_container">
+        
+    </div>
 </template>
 
 <script>
