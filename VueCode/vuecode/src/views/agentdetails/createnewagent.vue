@@ -439,6 +439,9 @@ export default {
                 if(Array.isArray(res.data.data) && res.data.data.length > 0){
                     console.log("Agent list found");
                     this.managerList               =   res.data.data;
+                    if(this.loggedInAgent == "admin"){
+                        this.managerList.unshift({"AgentID":"admin","FirstName":"Self","LastName":""});
+                    }
                 }
                 // else if(res.data && res.data.data && res.data.data){
                 //         this.agentList  = [res.data.data];

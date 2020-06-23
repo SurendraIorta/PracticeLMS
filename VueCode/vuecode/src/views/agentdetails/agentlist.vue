@@ -23,12 +23,66 @@ export default {
                     value: 'AgentID'
                 },
                 {
-                    text: 'Agent Name',
+                    text: 'First Name',
                     align: 'start',
                     sortable: false,
-                    value: 'agentDetailText'
+                    value: 'FirstName'
                 },
-
+                {
+                    text: 'Last Name',
+                    align: 'start',
+                    sortable: false,
+                    value: 'LastName'
+                },
+                {
+                    text: 'Department Name',
+                    align: 'start',
+                    sortable: false,
+                    value: 'Department'
+                },
+                {
+                    text: 'Branch Name',
+                    align: 'start',
+                    sortable: true,
+                    value: 'BranchName'
+                },
+                {
+                    text: 'Manager ID',
+                    align: 'start',
+                    sortable: true,
+                    value: 'ManagerID'
+                },
+                {
+                    text: 'ContactNumber',
+                    align: 'start',
+                    sortable: false,
+                    value: 'ContactNumber'
+                },
+                 {
+                    text: 'Email',
+                    align: 'start',
+                    sortable: false,
+                    value: 'Email'
+                },
+                {
+                    text: 'City',
+                    align: 'start',
+                    sortable: true,
+                    value: 'City'
+                },
+                {
+                    text: 'State',
+                    align: 'start',
+                    sortable: true,
+                    value: 'State'
+                },
+                {
+                    text:'Photo',
+                    align: 'start',
+                    sortable: false,
+                    value: 'Photo'
+                }
+                
             ],
             agentList           :   []
 
