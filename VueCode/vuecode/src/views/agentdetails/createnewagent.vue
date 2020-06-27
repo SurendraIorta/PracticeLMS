@@ -314,10 +314,10 @@ export default {
 
             agentDetails:{
                 "AgentID"           : "A309092",
-                "FirstName"         : "Admin",
+                "FirstName"         : "Manager",
                 "MiddleName"        : "",
                 "LastName"          : "",
-                "Gender"            : "",
+                "Gender"            : "Male",
                 "ContactNumber"     : "9999999999",
                 "OtherContactNumber": "9930293939",
                 "Email"             : "adminpem@lmspractice.in",
@@ -357,17 +357,23 @@ export default {
     },
     methods:{
         createNewAgent(){
-            this.agentDetails.Photo =   this.userPhotoImg;
-            this.agentDetails.CreatedBy =   "admin";
-            this.agentDetails.DateOfBirth   =   this.dateFormatted;
+            let newAgentDeatils     =   this.agentDetails
+            newAgentDeatils.Photo =   this.userPhotoImg;
+            newAgentDeatils.CreatedBy =  this.loggedInAgent;
+            newAgentDeatils.DateOfBirth   =   this.dateFormatted;
             console.log(this.agentDetails);
 
-            axios.post(allUrl.getURL("createAgent"),this.agentDetails)
+            axios.post(allUrl.getURL("createAgent"),newAgentDeatils)
             .then((res)=>{
                 console.log(res);
+                if(res.data.data.AgentID){
+                    alert("Agent created successfully.");
+                }
+                this.$refs.form.reset();
             })
             .catch((err)=>{
                 console.log(err);
+                alert(err);
             })
             
         },
@@ -454,7 +460,8 @@ export default {
                 alert(err);
             });
         }
-    },computed: {
+    },
+    computed: {
       computedDateFormatted () {
         return this.formatDate(this.date)
       },
