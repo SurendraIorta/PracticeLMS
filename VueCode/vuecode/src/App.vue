@@ -3,8 +3,8 @@
 
     <v-content class="bg_img">
       <!-- <createnewlead/> -->
-      <createagent/>
-      <!-- <agentlist/> -->
+      <!-- <createagent/> -->
+      <agentlist/>
         <!-- <tabview/> -->
     </v-content>
   </v-app>
@@ -12,8 +12,8 @@
 
 <script>
 // import createnewlead from './views/createnewlead';
-import createagent from './views/agentdetails/createnewagent';
-// import agentlist from './views/agentdetails/agentlist';
+// import createagent from './views/agentdetails/createnewagent';
+import agentlist from './views/agentdetails/agentlist';
 // import tabview from './samplecodes/tabview';
   
   
@@ -23,8 +23,8 @@ export default {
 
   components: {
     // createnewlead,
-    createagent,
-    // agentlist,
+    // createagent,
+    agentlist,
     // tabview,
   },
 
