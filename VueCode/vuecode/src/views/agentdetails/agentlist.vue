@@ -4,7 +4,11 @@
             :headers="agentTableHeaders"
             :items="agentList"
             :items-per-page="5"
-        ></v-data-table>
+        >
+            <template v-slot:item.Photo="{ item }">
+                <v-img :src="item.Photo" style="width: 50px; height: 50px" />
+            </template>
+        </v-data-table>
     </div>
 </template>
 
@@ -115,7 +119,6 @@ export default {
                 // }
                 else{
                     this.agentList  = [];
-                    
                 }
             }).catch((err)=>{
                 console.log(err.message);

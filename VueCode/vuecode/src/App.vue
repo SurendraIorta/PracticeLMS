@@ -6,6 +6,7 @@
       <!-- <createagent/> -->
       <agentlist/>
         <!-- <tabview/> -->
+        
     </v-content>
   </v-app>
 </template>
@@ -26,6 +27,7 @@ export default {
     // createagent,
     agentlist,
     // tabview,
+    
   },
 
   data: () => ({
