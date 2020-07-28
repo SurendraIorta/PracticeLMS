@@ -4,8 +4,10 @@
     <v-content class="bg_img">
       <!-- <createnewlead/> -->
       <!-- <createagent/> -->
-      <agentlist/>
-        <!-- <tabview/> -->
+      <!-- <agentlist/> -->
+      <!-- <tabview/> -->
+      <!-- <mapview/> -->
+      <calview/>
         
     </v-content>
   </v-app>
@@ -14,10 +16,10 @@
 <script>
 // import createnewlead from './views/createnewlead';
 // import createagent from './views/agentdetails/createnewagent';
-import agentlist from './views/agentdetails/agentlist';
+// import agentlist from './views/agentdetails/agentlist';
 // import tabview from './samplecodes/tabview';
-  
-  
+  import calview from './samplecodes/CalendarAPI'
+  import mapview from './samplecodes/mapselectlocation';
 
 export default {
   name: 'App',
@@ -25,9 +27,10 @@ export default {
   components: {
     // createnewlead,
     // createagent,
-    agentlist,
+    // agentlist,
     // tabview,
-    
+    // mapview,
+    calview
   },
 
   data: () => ({
